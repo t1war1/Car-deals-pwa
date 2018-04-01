@@ -53,15 +53,33 @@ function generateCar(car) {
 }
 
 function fetchCars(callback) {
-    $.get(`http://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/latest-deals.php?carId=${getLastCarId()}`,
-        (data)=>{
-        console.log(data);
-        addCars(data.cars).then(()=>{
+    fetchPromise()
+        .then((status)=>{
+            $('#connection-status').text(status);
             loadMore(callback);
-        });
+        })
+}
 
-        }
-        )
+
+function fetchPromise() {
+    return new Promise((resolve,reject)=>{
+        $.ajax({
+            url:`http://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/latest-deals.php?carId=${getLastCarId()}`,
+            success:(data)=>{
+                console.log(data);
+                addCars(data.cars).then(()=>{
+                    resolve("The connection is OK, showing latest results");
+                });
+
+            },
+            error:(err)=>{
+                resolve("No connection, showing offline results");
+            }
+        });
+        setTimeout(()=>{
+            resolve("The connection is hanging, showing offline results");
+        },3000);
+    });
 }
 
 
