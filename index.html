@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Car Deals</title>
+    <link rel="stylesheet" href="resources/material-design-light/material.red-indigo.min.css">
+    <script src="resources/material-design-light/material.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/fetch.js"></script>
+    <style>
+        .center{
+            text-align: center;
+            padding: 10px;
+        }
+        .mdl-card{cursor:pointer;color:#ffffff;height:250px;background-size: cover;}
+        .mdl-card__title-text{color:#ffffff;background-color:rgba(0,0,0,0.5);padding:15px;
+            position:absolute;left:0;bottom:0;width:100%;box-sizing: border-box;}
+    </style>
+</head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <span class="mdl-layout-title">Car Deals</span>
+                <div class="mdl-layout-spacer"></div>
+                <nav class="mdl-navigation">
+                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+                         Refresh
+                     </button>
+                </nav>
+            </div>
+        </header>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid">
+                <!--Dynamic data here-->
+            </div>
+            <div class="center">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+                Show more
+            </button>
+            </div>
+        </main>
+    </div>
+    <script id="car-card" type="text/template">
+        <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--6dp" style="background-image: url('{{image}}')">
+            <div class="mdl-card__title">
+                <span class="mdl-card__title-text">{{title}} (${{price}})</span>
+            </div>
+        </div>
+    </script>
+
+</body>
+</html>
