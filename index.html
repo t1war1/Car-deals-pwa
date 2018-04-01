@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="resources/material-design-light/material.red-indigo.min.css">
     <script src="resources/material-design-light/material.min.js"></script>
     <script src="js/jquery.js"></script>
+    <script src="resources/localforage/localforage.min.js"></script>
+    <script src="resources/localforage/localforage-getitems.js"></script>
+    <script src="resources/localforage/localforage-setitems.js"></script>
     <script src="js/fetch.js"></script>
     <style>
         .center{
@@ -26,7 +29,7 @@
                 <span class="mdl-layout-title">Car Deals</span>
                 <div class="mdl-layout-spacer"></div>
                 <nav class="mdl-navigation">
-                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" onclick="location.reload()">
                          Refresh
                      </button>
                 </nav>
@@ -44,19 +47,12 @@
                 <!--Dynamic data here-->
             </div>
             <div class="center">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" onclick="pageEvents.loadMore()">
                 Show more
             </button>
             </div>
         </main>
     </div>
-    <!--<script id="car-card" type="text/template">-->
-        <!--<div class="mdl-card mdl-cell mdl-cell&#45;&#45;4-col mdl-shadow&#45;&#45;6dp" style="background-image: url('{{image}}')">-->
-            <!--<div class="mdl-card__title">-->
-                <!--<span class="mdl-card__title-text">{{title}} (${{price}})</span>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</script>-->
 
 </body>
 </html>
