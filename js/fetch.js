@@ -68,6 +68,7 @@ function fetchPromise() {
             success:(data)=>{
                 console.log(data);
                 addCars(data.cars).then(()=>{
+                    data.cars.forEach(preCacheDetailsPage)
                     resolve("The connection is OK, showing latest results");
                 });
 
@@ -127,4 +128,24 @@ function getCars(){  //get cars stored in IndexedDB
 
 function getLastCarId(){ //to get the id of the last car loaded
     return lastItemId;
+}
+
+function preCacheDetailsPage(car) {
+    //if service worker object exist, we'll cache our data
+    if('serviceWorker' in navigator){
+        var carDetailsUrl=`http://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/car.php?carId=`+car.value.details_id;
+        window.caches.open('carDealsCachePagesV1')   //opening cache object collection names carDealsCachePagesV1 (created if doesn't exist)
+            .then((cache)=>{
+                //now we'll check if page is already cached:
+                //cache is a key-value pair with key as url and the value of data the page cached.
+                cache.match(carDetailsUrl).then((response)=>{
+                    if(!response) //if response does exist do nothing else
+                    {
+                        cache.add(new Request(carDetailsUrl)); //else add to cache
+                    }
+                })
+            })
+
+    }
+
 }
