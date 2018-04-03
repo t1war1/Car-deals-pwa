@@ -2,6 +2,8 @@ var lastItemId = null; var limit = 3;
 
 $(()=>{
 
+    swRegister();
+
     window.pageEvents={
         loadCarPage:(carId)=>{
             $.get(`https://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/car.php?carId=${carId}`,(data)=>{
@@ -13,12 +15,12 @@ $(()=>{
             fetchCars((cars)=>{
                 $('#first-load').hide();
                 var cardHTML="";
-                console.log(cars.length);
+                // console.log(cars.length);
                 for(var i=0;i<cars.length;i++){
                     var temp=generateCar(cars[i]);
                     cardHTML=cardHTML+temp;
                 }
-                console.log(cardHTML);
+                // console.log(cardHTML);
                 grid.append(cardHTML);
                 $('.mdl-layout__content').css({'display':'inline-block'});
 
@@ -30,12 +32,12 @@ $(()=>{
     fetchCars((cars)=>{
         $('#first-load').hide();
         var cardHTML="";
-        console.log(cars.length);
+        // console.log(cars.length);
         for(var i=0;i<cars.length;i++){
             var temp=generateCar(cars[i]);
             cardHTML=cardHTML+temp;
         }
-        console.log(cardHTML);
+        // console.log(cardHTML);
         grid.append(cardHTML);
         $('.mdl-layout__content').css({'display':'inline-block'});
 
@@ -66,7 +68,7 @@ function fetchPromise() {
         $.ajax({
             url:`http://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/latest-deals.php?carId=${getLastCarId()}`,
             success:(data)=>{
-                console.log(data);
+                // console.log(data);
                 addCars(data.cars).then(()=>{
                     data.cars.forEach(preCacheDetailsPage)
                     resolve("The connection is OK, showing latest results");
@@ -148,4 +150,57 @@ function preCacheDetailsPage(car) {
 
     }
 
+}
+
+//swRegister.js////////////////////////
+
+function swRegister() {
+    if('serviceWorker' in navigator) //check if service workers are enabled and compatible with user's browser
+    {
+        navigator.serviceWorker.register('sw.js',{scope:''}) //setting scope of service worker. In this case, service worker is at root path so it has full control over the page
+            .then((swRegistration)=>{
+                // console.log(swRegistration);
+                var serviceWorker;
+                if(swRegistration.installing)
+                {
+                    console.log('Resolved at installing',swRegistration);
+                    serviceWorker=swRegistration.installing;
+                }
+                else if(swRegistration.waiting)
+                {
+                    console.log('Resolved at installing/waiting',swRegistration);
+                    serviceWorker=swRegistration.waiting;
+                }
+                else if (swRegistration.active)
+                {
+                    console.log('Resolved at activated',swRegistration);
+                    serviceWorker=swRegistration.active;
+                }
+                if (serviceWorker)
+                {
+                    serviceWorker.addEventListener('statechange',(e)=>{
+                        console.log(e.target.state);
+                    })
+                }
+
+                swRegistration.addEventListener('updatefound',(e)=>{ //fired everytime updated service worker is found
+                    swRegistration.installing.addEventListener('statechange',(e)=>{
+                        console.log('new service state :'+ e.target.state);
+                    })
+                    console.log("new service worker found");
+                });
+
+                setInterval(()=>{ //check for update after every 5 seconds ch
+                    swRegistration.update();
+                },5000);
+
+            })
+            .catch((err)=>{
+                console.log('Error occured:',err);
+            });
+
+            navigator.serviceWorker.addEventListener('controllerchange',(e)=>{
+                console.log('controller changed'); //fired when service worker controlling the page changes through self.client.clain and self.skipwaiting in sw.js file
+            })
+    }
 }
