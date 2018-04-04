@@ -87,7 +87,7 @@ self.addEventListener('fetch',function (event) {  //fetch means fetching from ne
         event.respondWith(fetch(event.request));
     }else if(requestPath === imagePath){
         //Network First then Offline Strategy
-        event.respondWith(networkFirstStrategy(event.request));
+        event.respondWith(networkFirstStrategy(event.request));//as we want to get the latest details and the service worker in the latest state possible
     }else{ //for any image,page or site's resources
         //Offline First then Network Strategy i.e. we will look for resource specified in local cache and if that fails then return response from network and cache it
         event.respondWith(cacheFirstStrategy(event.request));
@@ -128,3 +128,7 @@ function getCacheName(request){
         return carDealsCacheName;
     }
 }
+
+self.addEventListener('message',function (event) {
+        event.source.postMessage({clientId:event.source.id,message:'sw'});
+})

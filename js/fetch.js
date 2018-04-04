@@ -201,6 +201,17 @@ function swRegister() {
 
             navigator.serviceWorker.addEventListener('controllerchange',(e)=>{
                 console.log('controller changed'); //fired when service worker controlling the page changes through self.client.clain and self.skipwaiting in sw.js file
-            })
+            });
+
+            navigator.serviceWorker.addEventListener('message',(event)=>{ //for communication between service worker and the client
+                var clientId=event.data.clientId;
+                var message=event.data.message;
+                console.log('From Client : ',clientId,message);
+            });
+
+            if(navigator.serviceWorker.controller!=null)
+            {
+                navigator.serviceWorker.controller.postMessage('hello');
+            }
     }
 }
